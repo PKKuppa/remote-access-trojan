@@ -1,0 +1,26 @@
+FEATURES
+- Keylogger
+    - Backspace Detection
+- Webcam Capture
+- Screen Capture
+- Exfiltration
+- Credential Capture
+- Remote Access
+
+EXTRA
+- BSOD
+- VM Detection
+
+ROADMAP
+1. Keylogger
+2. Screen Capture
+3. Webcam Capture
+4. Screen Capture
+5. Credential
+6. SSH
+???. Obfuscation
+    - AV detection
+    - Disabling Fire Wall
+
+Attacker: Kali Linux
+Victim: Windows 11
