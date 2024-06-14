@@ -21,5 +21,5 @@ ROADMAP
     - AV detection
     - Disabling Fire Wall
 
-Attacker: Kali Linux
-Victim: Windows 11
+
+Victim: Windows 10/11
