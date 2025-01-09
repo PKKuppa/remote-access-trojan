@@ -17,6 +17,7 @@ ROADMAP
 3. Webcam Capture
 5. Credential
 6. SSH
+7. File Permission Enumeration
 ???. Obfuscation
     - AV detection
     - Disabling Fire Wall
