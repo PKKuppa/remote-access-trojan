@@ -21,5 +21,4 @@ ROADMAP
     - AV detection
     - Disabling Fire Wall
 
-
 Victim: Windows 10/11
