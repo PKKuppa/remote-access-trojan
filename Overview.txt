@@ -15,7 +15,6 @@ ROADMAP
 1. Keylogger
 2. Screen Capture
 3. Webcam Capture
-4. Screen Capture
 5. Credential
 6. SSH
 ???. Obfuscation
