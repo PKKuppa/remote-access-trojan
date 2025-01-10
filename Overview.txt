@@ -22,6 +22,7 @@ ROADMAP
     - Finding user registry
     - Hashdumping from User Registry
     - Enumerating Firewall and AV configs
+    - Credential Scraping
 ???. Obfuscation
     - AV detection
     - Disabling Fire Wall
