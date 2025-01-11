@@ -18,6 +18,7 @@ ROADMAP
 5. Credential
 6. SSH
 7. File Permission Enumeration
+8. LSASS Hash dumping
 ???. Obfuscation
     - AV detection
     - Disabling Fire Wall
