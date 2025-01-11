@@ -17,10 +17,14 @@ ROADMAP
 3. Webcam Capture
 5. Credential
 6. SSH
-7. File Permission Enumeration
+7. File Enumeration
+    - Finding executables with admin permissions
+    - Finding user registry
+    - Enumerating Firewall and AV configs
+    - Credential Scraping
 8. LSASS Hash dumping
 ???. Obfuscation
     - AV detection
     - Disabling Fire Wall
-
+    
 Victim: Windows 10/11
