@@ -33,24 +33,55 @@ Write-Host ""
 
 #Searching for executables that can be run as admin
 function Enumerate-Files {
-    #Need to get dlls as well
-    #Need to filter by
+    #TODO: Instead of enumerating from root, enumerate certain directories like system32
+    #Also filter by admin or system ownership
     Write-Host ""
     $exec = @()
-    Get-Childitem -Recurse -Filter *.exe -Path C:\ -ErrorAction SilentlyContinue | ForEach-Object{
+    $riskyPermissions = @(
+        "WriteData", "AppendData", "WriteAttributes", "WriteExtendedAttributes",
+        "Delete", "WriteOwner", "WriteDacl", "TakeOwner", "FullControl"
+    )
+    Get-Childitem -Recurse -Depth 1 -Filter *.exe -Path C:\ -ErrorAction SilentlyContinue | ForEach-Object{
 
        try{ $acl = Get-Acl -Path $_.FullName
     } catch{$acl = $null}
        If($acl){
-            Write-Host $acl.Owner
+        $owner = $acl.Owner
+        $group = $acl.Group
+        foreach($Access in $acl.Access){
+            $identity = $Access.IdentityReference
+            $permissions = $Access.FileSystemRights.ToString().Split(", ")
+            $allow = $Access.AccessControlType
+
+            $isRisky = ($identity -notlike "Administrators") -and ($permissions | Where-Object {$riskyPermissions -contains $_ }) 
+            if($isRisky){
+                $exec += 
+                    [PSCustomObject]@{
+                        Identity = $identity
+                        Permissions = $permissions
+                        Allow = $allow
+                        Owner = $owner
+                        Group = $group
+                    }
+                }
+            }
+        }    
+       }
+       if($exec.Count -eq 0){
+        Write-Host "No interesting file permissions found ...." -ForegroundColor Cyan
+       }
+       else{
+        $exec | Format-Table -AutoSize
+        #Write-Host $exec -ForegroundColor Yellow
        }
     }
     
-    
-}
 
 function Enumerate-Registry{
-    Get-ChildItem -Path HKLM:\SAM
+    $antivirus = @()
+    Get-ChildItem -Path HKLM:\Software | ForEach-Object{
+
+    }
 }
 
 
@@ -58,9 +89,9 @@ function Enumerate-Registry{
 Print-Header
 Print-Divider DarkYellow
 Write-Host -ForegroundColor Green "====================================== Enumerating Files with Interesting Permissions ======================================"
-#Enumerate-Files
+Enumerate-Files
 Write-Host -ForegroundColor Green "====================================== Enumerating Windows Registry ========================================================"
-Enumerate-Registry
+#Enumerate-Registry
 
 
 
