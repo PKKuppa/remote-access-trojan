@@ -20,9 +20,9 @@ ROADMAP
 7. File Enumeration
     - Finding executables with admin permissions
     - Finding user registry
-    - Hashdumping from User Registry
     - Enumerating Firewall and AV configs
     - Credential Scraping
+8. LSASS Hash dumping
 ???. Obfuscation
     - AV detection
     - Disabling Fire Wall
