@@ -7,11 +7,7 @@ using namespace std;
 
 int main()
 {
-    //Hide the Window
-    HWND window;
-    window = FindWindowA("ConsoleWindowClass",NULL);
-    AllocConsole();
-    ShowWindow(window, 0);
+
     //Temp output file
     string outfile = "output.txt";
     ofstream output;

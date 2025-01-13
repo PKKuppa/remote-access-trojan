@@ -12,9 +12,9 @@ EXTRA
 - VM Detection
 
 ROADMAP
-1. Keylogger
-2. Screen Capture
-3. Webcam Capture
+1. Keylogger(Run as service in background)
+2. Screen Capture(Run as service in background)
+3. Webcam Capture(Run as service in background)
 5. Credential
 6. SSH
 7. File Enumeration

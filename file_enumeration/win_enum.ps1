@@ -33,17 +33,20 @@ Write-Host ""
 
 #Searching for executables that can be run as admin
 function Enumerate-Files {
-    #TODO: Instead of enumerating from root, enumerate certain directories like system32
+
     #Also filter by admin or system ownership
+    $directories = @("\Windows\System32", "\Program Files", "\Program Files (x86)", "\Windows\Temp")
     Write-Host ""
     $exec = @()
     $riskyPermissions = @(
         "WriteData", "AppendData", "WriteAttributes", "WriteExtendedAttributes",
         "Delete", "WriteOwner", "WriteDacl", "TakeOwner", "FullControl"
     )
-    Get-Childitem -Recurse -Depth 1 -Filter *.exe -Path C:\ -ErrorAction SilentlyContinue | ForEach-Object{
 
-       try{ $acl = Get-Acl -Path $_.FullName
+    foreach($dir in $directories){
+    Get-Childitem  -Filter *.exe -Path $dir -ErrorAction SilentlyContinue | ForEach-Object{
+        $fullPath = $_.FullName
+       try{ $acl = Get-Acl -Path $fullPath
     } catch{$acl = $null}
        If($acl){
         $owner = $acl.Owner
@@ -53,10 +56,13 @@ function Enumerate-Files {
             $permissions = $Access.FileSystemRights.ToString().Split(", ")
             $allow = $Access.AccessControlType
 
-            $isRisky = ($identity -notlike "Administrators") -and ($permissions | Where-Object {$riskyPermissions -contains $_ }) 
+            $isRisky = #(($owner -contains "Administrator" -or $group -contains "Administrator") -or ($owner -contains "System" -or $group -contains "System")) -and 
+            ($permissions | Where-Object {$riskyPermissions -contains $_ }) 
+
             if($isRisky){
                 $exec += 
                     [PSCustomObject]@{
+                        Path = $fullPath
                         Identity = $identity
                         Permissions = $permissions
                         Allow = $allow
@@ -65,6 +71,7 @@ function Enumerate-Files {
                     }
                 }
             }
+        }
         }    
        }
        if($exec.Count -eq 0){
