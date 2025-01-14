@@ -102,6 +102,7 @@ $filetypes = @("*.txt","*.dat", "*.php", "*.config", "*.html")
 
 #User Prompt to select enumeration options
 function Enum-Prompt{
+    $outfile = $null
     Print-Header
     while($true){
     
@@ -109,22 +110,29 @@ function Enum-Prompt{
     Write-Host "1. Enumerate Files" -ForegroundColor Yellow
     Write-Host "2. Find Credentials" -ForegroundColor Yellow
     Write-Host "3. Enumerate Registry" -ForegroundColor Yellow
-    Write-Host "4. Run All(Will output to a file)" -ForegroundColor Yellow
+    Write-Host "4. Run All" -ForegroundColor Yellow
+    Write-Host "5. Set output file(Current Outfile: $outfile)" -ForegroundColor Yellow
     Write-Host "0. Exit" -ForegroundColor Yellow
-    $option = Read-Host -Prompt "Select Option(0-4) " 
+    $option = Read-Host -Prompt "Select Option(0-4) "
     #make outfile option
     switch($option){
         0  {Write-Host "Thank You! Come again!" -ForegroundColor Magenta
             exit}
-        1 {Enumerate-Files}
-        2 {Find-Credentials}
-        3 {Enumerate-Registry}
+        1 {if($outfile){Enumerate-Files >> $outfile} 
+    else {Enumerate-Files}}
+        2 {if($outfile){Find-Credentials | Tee-Object -FilePath $outfile} 
+        else {Find-Credentials}}
+        3 {if($outfile){Enumerate-Registry >> $outfile} 
+        else {Enumerate-Registry}}
         4 {
             #Spit to outfile
 
         }
+        5{
+           $outfile = Read-Host -Prompt "Enter the name of the output file"
+        }
         default {
-           $option =  Read-Host "Please enter a number from 0-4 " 
+           $option =  Write-Host "Please enter a number from 0-4" -ForegroundColor Red
         }
 
     }
