@@ -75,7 +75,61 @@ function Enumerate-Files {
         #Write-Host $exec -ForegroundColor Yellow
        }
     }
+
+function Find-Credentials{
+$emailRegex = '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+$credRegex = ""
+$emails = @()
+$credentials = @()
+$filetypes = @("*.txt","*.dat", "*.php", "*.config", "*.html")
+ Get-ChildItem -Path \Users\gasprobs\Desktop -Recurse  -Depth 1 -Include $filetypes -ErrorAction SilentlyContinue | ForEach-Object{
+    $fullPath = $_.FullName
+    $emailMatches = Select-String -Pattern $emailRegex -Path $fullPath -AllMatches
+
+    if($emailMatches.Matches.Count -gt 0){
+        $emailMatches.Matches | % {
+            $emails += [PSCustomObject]@{
+                Email = $_
+                Path = $fullPath
+
+            }
+        }
+    }
+    #$credMatches = Select-String -Pattern $credRegex -Path $fullPath
+ }
+ $emails | Format-Table -AutoSize
+}
+
+#User Prompt to select enumeration options
+function Enum-Prompt{
+    Print-Header
+    while($true){
     
+    #Print-Divider DarkYellow
+    Write-Host "1. Enumerate Files" -ForegroundColor Yellow
+    Write-Host "2. Find Credentials" -ForegroundColor Yellow
+    Write-Host "3. Enumerate Registry" -ForegroundColor Yellow
+    Write-Host "4. Run All(Will output to a file)" -ForegroundColor Yellow
+    Write-Host "0. Exit" -ForegroundColor Yellow
+    $option = Read-Host -Prompt "Select Option(0-4) " 
+    #make outfile option
+    switch($option){
+        0  {Write-Host "Thank You! Come again!" -ForegroundColor Magenta
+            exit}
+        1 {Enumerate-Files}
+        2 {Find-Credentials}
+        3 {Enumerate-Registry}
+        4 {
+            #Spit to outfile
+
+        }
+        default {
+           $option =  Read-Host "Please enter a number from 0-4 " 
+        }
+
+    }
+}
+}
 
 function Enumerate-Registry{
     $antivirus = @()
@@ -86,14 +140,15 @@ function Enumerate-Registry{
 
 
 
-Print-Header
-Print-Divider DarkYellow
-Write-Host -ForegroundColor Green "====================================== Enumerating Files with Interesting Permissions ======================================"
-Enumerate-Files
-Write-Host -ForegroundColor Green "====================================== Enumerating Windows Registry ========================================================"
+# Print-Header
+# Print-Divider DarkYellow
+# Write-Host -ForegroundColor Green "====================================== Enumerating Files with Interesting Permissions ======================================"
+# Enumerate-Files
+# Write-Host -ForegroundColor Green "====================================== Enumerating Windows Registry ========================================================"
 #Enumerate-Registry
-
-
+# Write-Host -ForegroundColor Green "====================================== Harvesting Credentials =============================================================="
+# Find-Credentials
+Enum-Prompt
 
 
 
