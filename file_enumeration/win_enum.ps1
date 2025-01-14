@@ -78,14 +78,14 @@ function Enumerate-Files {
 
 function Find-Credentials{
 $emailRegex = '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
-$credRegex = ""
+# $credRegex = "([a-z][^\W_]{7,14}/i)|((?=[^a-z]*[a-z])(?=\D*\d)[^:&.~\s]{5,20})"
 $emails = @()
 $credentials = @()
 $filetypes = @("*.txt","*.dat", "*.php", "*.config", "*.html")
  Get-ChildItem -Path \Users\gasprobs\Desktop -Recurse  -Depth 1 -Include $filetypes -ErrorAction SilentlyContinue | ForEach-Object{
     $fullPath = $_.FullName
     $emailMatches = Select-String -Pattern $emailRegex -Path $fullPath -AllMatches
-
+    # $credMatches = Select-String -Pattern $credRegex -Path $fullPath -AllMatches
     if($emailMatches.Matches.Count -gt 0){
         $emailMatches.Matches | % {
             $emails += [PSCustomObject]@{
@@ -95,8 +95,18 @@ $filetypes = @("*.txt","*.dat", "*.php", "*.config", "*.html")
             }
         }
     }
-    #$credMatches = Select-String -Pattern $credRegex -Path $fullPath
+    # if($credMatches.Matches.Count -gt 0){
+    #     $credMatches.Matches | % {
+    #         $credentials += [PSCustomObject]@{
+    #             Credential = $_
+    #             Path = $fullPath
+
+    #         }
+    #     }
+    # }
+    
  }
+#  $credentials | Format-Table -AutoSize
  $emails | Format-Table -AutoSize
 }
 
