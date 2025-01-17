@@ -22,7 +22,7 @@ ROADMAP
     - Finding user registry
     - Enumerating Firewall and AV configs
     - Credential Scraping
-8. LSASS Hash dumping
+8. Process Injection and LSASS Hash dumping
 ???. Obfuscation
     - AV detection
     - Disabling Fire Wall
